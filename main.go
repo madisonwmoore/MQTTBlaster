@@ -1,46 +1,54 @@
 package main
 
 import ("fmt"
- "bufio"
-  "os"
-"strings"
+"flag"
+//  "bufio"
+//   "os"
+// "strings"
 // "net"
-MQTT "github.com/eclipse/paho.mqtt.golang"
-"time"
+// MQTT "github.com/eclipse/paho.mqtt.golang"
+// "time"
+
 )
 
 
 
-var onconnect MQTT.OnConnectHandler =func(client MQTT.Client){
-	fmt.Println("Connected to broker")
-}
+
 
 
 func main() {
 
-	opt:=MQTT.NewClientOptions()
-	opt.AddBroker("tcp://test.mosquitto.org:1883")
-	opt.SetClientID("MQTTblaster")
-	opt.OnConnect=onconnect
 
-	client := MQTT.NewClient(opt)
+	// opt:=MQTT.NewClientOptions()
+	// opt.AddBroker("tcp://test.mosquitto.org:1883")
+	// opt.SetClientID("MQTTblaster")
+	// opt.OnConnect=onconnect
 
-	if token := client.Connect(); token.Wait() && token.Error() != nil {
-		panic(token.Error())
-	}
+	// client := MQTT.NewClient(opt)
 
-
+	// if token := client.Connect(); token.Wait() && token.Error() != nil {
+	// 	panic(token.Error())
+	// }
 	fmt.Println("/********/")
 	fmt.Println("MQTTBlaster Version 1.0")
 	fmt.Println("/********/")
-	
-	reader := bufio.NewReader(os.Stdin)
-	
-	command,_:=reader.ReadString('\n')
-	command = strings.TrimSpace(command)
 
-	switch command{
-	case "run":
-		fmt.Println("Nothing to run")
-	}
+	broker := flag.String("b","tcp://test.mosquitto.org:1883","Address of the broker")
+	clientID := flag.String("c","MQTTblaster","ClientID to be used with connection")
+	flag.Parse()
+	
+	fmt.Println("Broker is ",*broker,*clientID)
+
+	connect(*broker,*clientID)
+
+	
+	// reader := bufio.NewReader(os.Stdin)
+	
+	// command,_:=reader.ReadString('\n')
+	// command = strings.TrimSpace(command)
+
+	// switch command{
+	// case "run":
+	// 	fmt.Println("Nothing to run")
+	// }
 }
