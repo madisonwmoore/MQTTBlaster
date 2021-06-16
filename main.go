@@ -33,13 +33,20 @@ func main() {
 	fmt.Println("MQTTBlaster Version 1.0")
 	fmt.Println("/********/")
 
-	broker := flag.String("b","tcp://test.mosquitto.org:1883","Address of the broker")
+	broker := flag.String("b","","Address of the broker")
 	clientID := flag.String("c","MQTTblaster","ClientID to be used with connection")
 	flag.Parse()
+
+	if(*broker==""){
+		fmt.Println("Enter Broker Address:")
+	}
 	
 	fmt.Println("Broker is ",*broker,*clientID)
 
-	connect(*broker,*clientID)
+	blaster := MQTTBlaster{host:*broker,clientID: *clientID}
+
+	blaster.connect()
+
 
 	
 	// reader := bufio.NewReader(os.Stdin)
