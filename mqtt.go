@@ -3,11 +3,15 @@ package main
 import ("fmt"
 MQTT "github.com/eclipse/paho.mqtt.golang")
 
-var onconnect MQTT.OnConnectHandler =func(client MQTT.Client){
-	fmt.Println("Connected to broker")
-}
+
 
 func connect(host string, clientID string){
+
+	var onconnect MQTT.OnConnectHandler =func(client MQTT.Client){
+		fmt.Println("Connected to broker")
+	}
+
+
 	opt:=MQTT.NewClientOptions()
 	opt.AddBroker(host)
 	opt.SetClientID(clientID)
@@ -18,4 +22,10 @@ func connect(host string, clientID string){
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
+}
+
+func publish(client MQTT.Client){
+	message := "Test Message"
+	token := client.Publish("topic/test",0, flase,message)
+	token.Wait()
 }
